@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    body{
+      margin: 0px;
+      min-height: 100vh;
+      
+      gap: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      flex-direction: column;
+    }
+
+    .clock{
+      height: 500px;
+      width: 500px;
+      border: 5px solid black;
+      border-radius: 50%;
+
+      position: relative;
+    }
+    .clock-face{
+      width: 100%;
+      height: 100%;
+
+      position: relative;
+    }
+    .hand{
+      position: absolute;
+
+      transform: rotate(90deg);
+      transform-origin: 80%;
+
+      transition: transform 0.05s;
+      transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+      
+    }
+    .second-hand{
+      top: 50%;
+      left: 10%;
+      width: 50%;
+    
+      margin-top: -4px;
+      height: 8px;
+      background-color: red;
+
+      clip-path: polygon(0 35%, 80% 35%, 80% 0, 100% 0, 100% 100%, 80% 100%, 80% 65%, 0 65%);
+    }
+
+
+    .minute-hand{
+      top: 50%;
+      left: 15%;
+      width: 43.75%;
+    
+      margin-top: -6px;
+      height: 12px;
+      background-color: black;
+
+      clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 60%);
+    }
+
+    .hour-hand{
+      top: 50%;
+      left: 20%;
+      width: 37.5%;
+    
+      margin-top: -7px;
+      height: 14px;
+      background-color: black;
+
+      clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 60%);
+    }
+
+    .center-dot{
+      width: 20px;
+      height: 20px;
+      background-color: green;
+      border-radius: 50%;
+      border: 2px solid black;
+
+      position: absolute;
+      top: 50%;
+      left: 50%;
+
+      
+      transform: translate(-50%, -50%);
+      
+    }
+
+    .digital-clock{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 5rem;
+      border-radius: 10px;
+
+      width: 300px;
+      height: 135px;
+      background-color: black;
+      border: 5px solid rgb(70, 70, 175);
+      color: red;
+    }
+
+  </style>
+</head>
+<body>
+  
+  <div class="clock">
+    <div class="clock-face">
+      <div class="hand second-hand"></div>
+      <div class="hand minute-hand"></div>
+      <div class="hand hour-hand"></div>
+      <div class="center-dot"></div>
+    </div>
+  </div>
+  <div class="digital-clock"></div>
+
+
+
+  <script>
+    const secondHand = document.querySelector('.second-hand');
+    const minuteHand = document.querySelector('.minute-hand');
+    const hourHand = document.querySelector('.hour-hand');
+    const digitalClock = document.querySelector('.digital-clock')
+    
+    function currentTime(){
+      const now = new Date();
+
+      const seconds = now.getSeconds();
+
+      if (seconds === 0){
+        secondHand.style.transition = 'none';
+      } else {
+        secondHand.style.transition = '';
+      }
+
+      const secondsDegrees = seconds * 6 + 90;
+      secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+
+      const minutes = now.getMinutes();
+
+      if (minutes === 0 && seconds === 0){
+        minuteHand.style.transition = 'none';
+      } else {
+        minuteHand.style.transition = '';
+      }
+      const minutesDegrees = minutes * 6 + seconds * 0.1 + 90;
+      minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
+
+      const hours = now.getHours();
+
+      if (hours === 0 && minutes === 0 && seconds === 0){
+        hourHand.style.transition = 'none';
+      } else {
+        hourHand.style.transition = '';
+      }
+      const hoursDegrees = hours * 30 + minutes * 0.5 + 90;
+      hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
+
+      const digitalHours = String(now.getHours()).padStart(2, "0");
+      const digitalMinutes = String(now.getMinutes()).padStart(2, "0");
+      const digitalSeconds = String(now.getSeconds()).padStart(2, "0");
+      
+      digitalClock.textContent = `${digitalHours}:${digitalMinutes}:${digitalSeconds}`;
+    }
+
+    setInterval(currentTime, 1000);
+
+    currentTime();
+  </script>
+</body>
+</html>
